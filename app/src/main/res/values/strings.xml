@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lesson9</string>
+    <string name="note_details_remove_button_label">Удалить</string>
+    <string name="note_details_add_button_label">Обновить</string>
+</resources>
