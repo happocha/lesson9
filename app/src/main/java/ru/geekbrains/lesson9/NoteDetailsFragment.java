@@ -1,10 +1,12 @@
 package ru.geekbrains.lesson9;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +30,6 @@ public class NoteDetailsFragment extends Fragment {
     private EditText titleEditText;
     private EditText descriptionEditText;
     private MaterialButton updateButton;
-    private MaterialButton deleteButton;
     private MaterialToolbar toolbar;
 
     @Nullable
@@ -45,7 +46,6 @@ public class NoteDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         titleEditText = view.findViewById(R.id.et_note_details_title);
         descriptionEditText = view.findViewById(R.id.et_note_details_description);
-        deleteButton = view.findViewById(R.id.btn_note_detail_remove);
         updateButton = view.findViewById(R.id.btn_note_detail_update);
         toolbar = view.findViewById(R.id.toolbar_note_details);
     }
@@ -61,10 +61,28 @@ public class NoteDetailsFragment extends Fragment {
                 }
             }
         });
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String title = titleEditText.getText().toString();
+                final String description = descriptionEditText.getText().toString();
+                saveDataToDatabase(title, description);
+            }
+        });
         if (getArguments() != null) {
             NoteModel noteModel = (NoteModel) getArguments().getSerializable(ARG_MODEL_KEY);
             titleEditText.setText(noteModel.getTitle());
             descriptionEditText.setText(noteModel.getDescription());
+        }
+    }
+
+    private void saveDataToDatabase(
+        @Nullable String title,
+        @Nullable String description) {
+        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(description)) {
+            // todo next lesson
+        } else {
+            Toast.makeText(requireContext(), "Поля не могут быть пустые", Toast.LENGTH_SHORT).show();
         }
     }
 }
