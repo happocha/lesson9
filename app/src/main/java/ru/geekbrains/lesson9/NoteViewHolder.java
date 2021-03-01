@@ -36,5 +36,12 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
                 callbacks.onItemClicked(getAdapterPosition());
             }
         });
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                callbacks.onLongItemClicked(getAdapterPosition());
+                return false;
+            }
+        });
     }
 }

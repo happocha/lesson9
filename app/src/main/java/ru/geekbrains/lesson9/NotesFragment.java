@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +19,7 @@ public class NotesFragment extends Fragment implements NoteAdapterCallbacks {
 
     private RecyclerView recyclerView;
     private final NoteAdapter adapter = new NoteAdapter(this);
+    private final NoteListAdapter noteListAdapter = new NoteListAdapter(new NoteItemCallback(), this);
     private final List<NoteModel> noteModels = new ArrayList<>();
 
     @Override
@@ -44,14 +47,24 @@ public class NotesFragment extends Fragment implements NoteAdapterCallbacks {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         recyclerView.addItemDecoration(new NoteSpaceDecorator(getResources().getDimensionPixelSize(R.dimen.default_space)));
-        recyclerView.setAdapter(adapter);
-        adapter.setItems(noteModels);
+//        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(noteListAdapter);
+        noteListAdapter.submitList(noteModels);
     }
 
     @Override
     public void onItemClicked(int position) {
         NoteModel model = noteModels.get(position);
         replaceFragment(model);
+    }
+
+    @Override
+    public void onLongItemClicked(int position) {
+        final List<NoteModel> items = new ArrayList<>();
+        noteModels.remove(position);
+        items.addAll(noteModels);
+        noteListAdapter.submitList(items);
+        Toast.makeText(requireContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
     }
 
     private void replaceFragment(@NonNull NoteModel model) {
