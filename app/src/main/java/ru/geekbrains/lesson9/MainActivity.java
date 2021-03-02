@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import ru.geekbrains.lesson9.notes.NotesFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

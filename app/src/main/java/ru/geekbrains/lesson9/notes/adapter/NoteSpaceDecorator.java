@@ -1,4 +1,4 @@
-package ru.geekbrains.lesson9;
+package ru.geekbrains.lesson9.notes.adapter;
 
 import android.graphics.Rect;
 import android.view.View;

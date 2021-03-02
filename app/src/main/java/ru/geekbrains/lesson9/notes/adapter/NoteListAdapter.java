@@ -1,4 +1,4 @@
-package ru.geekbrains.lesson9;
+package ru.geekbrains.lesson9.notes.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +8,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
+import ru.geekbrains.lesson9.model.NoteModel;
+import ru.geekbrains.lesson9.R;
+
 public class NoteListAdapter extends ListAdapter<NoteModel, NoteViewHolder> {
 
     private final NoteAdapterCallbacks callbacks;
 
-    protected NoteListAdapter(
+    public NoteListAdapter(
         @NonNull DiffUtil.ItemCallback<NoteModel> diffCallback,
         @NonNull NoteAdapterCallbacks callbacks) {
         super(diffCallback);

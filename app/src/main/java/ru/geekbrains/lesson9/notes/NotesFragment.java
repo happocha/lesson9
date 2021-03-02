@@ -1,11 +1,9 @@
-package ru.geekbrains.lesson9;
+package ru.geekbrains.lesson9.notes;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,27 +11,27 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotesFragment extends Fragment implements NoteAdapterCallbacks {
+import ru.geekbrains.lesson9.R;
+import ru.geekbrains.lesson9.model.NoteModel;
+import ru.geekbrains.lesson9.notedetails.NoteDetailsFragment;
+import ru.geekbrains.lesson9.notes.adapter.NoteAdapterCallbacks;
+import ru.geekbrains.lesson9.notes.adapter.NoteItemCallback;
+import ru.geekbrains.lesson9.notes.adapter.NoteListAdapter;
+import ru.geekbrains.lesson9.notes.adapter.NoteSpaceDecorator;
 
-    private static final String TAG = "NotesFragment";
-    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private List<NoteModel> noteList = new ArrayList<>();
+public class NotesFragment extends Fragment implements NoteAdapterCallbacks, NotesFirestoreCallbacks {
 
     private RecyclerView recyclerView;
     private FloatingActionButton floatingActionButton;
-    private final NoteAdapter adapter = new NoteAdapter(this);
-    private final NoteListAdapter noteListAdapter = new NoteListAdapter(new NoteItemCallback(), this);
 
+    private final List<NoteModel> noteList = new ArrayList<>();
+    private final NotesRepository repository = new NotesRepositoryImpl(this);
+    private final NoteListAdapter noteListAdapter = new NoteListAdapter(new NoteItemCallback(), this);
 
     @Nullable
     @Override
@@ -62,18 +60,19 @@ public class NotesFragment extends Fragment implements NoteAdapterCallbacks {
                 replaceFragment(null);
             }
         });
-        getNotes();
+        repository.requestNotes();
     }
 
     @Override
     public void onItemClicked(int position) {
-//        NoteModel model = noteModels.get(position);
-//        replaceFragment(model);
+        NoteModel model = noteList.get(position);
+        replaceFragment(model);
     }
 
     @Override
     public void onLongItemClicked(int position) {
-        Toast.makeText(requireContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+        NoteModel model = noteList.get(position);
+        repository.onDeleteClicked(model.getId());
     }
 
     private void replaceFragment(@Nullable NoteModel model) {
@@ -85,22 +84,21 @@ public class NotesFragment extends Fragment implements NoteAdapterCallbacks {
             .commit();
     }
 
-    private void getNotes() {
-        firebaseFirestore.collection(Constants.TABLE_NAME_NOTES)
-            .get()
-            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        if (task.getResult() != null) {
-                            noteList = task.getResult().toObjects(NoteModel.class);
-                        }
-                        Log.d("", "");
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
-                    }
-                }
-            });
+    @Override
+    public void onSuccessNotes(@NonNull List<NoteModel> items) {
+        noteList.clear();
+        noteList.addAll(items);
+        noteListAdapter.submitList(items);
     }
 
+    @Override
+    public void onErrorNotes(@Nullable String message) {
+        showToast(message);
+    }
+
+    private void showToast(@Nullable String message) {
+        if (message != null) {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
 }

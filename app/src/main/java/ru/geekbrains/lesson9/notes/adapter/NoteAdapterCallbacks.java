@@ -1,4 +1,4 @@
-package ru.geekbrains.lesson9;
+package ru.geekbrains.lesson9.notes.adapter;
 
 public interface NoteAdapterCallbacks {
 

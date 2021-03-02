@@ -1,4 +1,4 @@
-package ru.geekbrains.lesson9;
+package ru.geekbrains.lesson9.model;
 
 import java.io.Serializable;
 

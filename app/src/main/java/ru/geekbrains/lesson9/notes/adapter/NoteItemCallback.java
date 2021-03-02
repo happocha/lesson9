@@ -1,7 +1,9 @@
-package ru.geekbrains.lesson9;
+package ru.geekbrains.lesson9.notes.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
+
+import ru.geekbrains.lesson9.model.NoteModel;
 
 public class NoteItemCallback extends DiffUtil.ItemCallback<NoteModel> {
 

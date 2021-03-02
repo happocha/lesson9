@@ -1,13 +1,15 @@
-package ru.geekbrains.lesson9;
+package ru.geekbrains.lesson9.notes.adapter;
 
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
+
+import ru.geekbrains.lesson9.model.NoteModel;
+import ru.geekbrains.lesson9.R;
 
 public class NoteViewHolder extends RecyclerView.ViewHolder {
 
