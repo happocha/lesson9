@@ -4,17 +4,9 @@ import java.io.Serializable;
 
 public class NoteModel implements Serializable {
 
-    private final String id;
-    private final String title;
-    private final String description;
-    private final int backgroundColor;
-
-    public NoteModel(String id, String title, String description, int backgroundColor) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.backgroundColor = backgroundColor;
-    }
+    private String id;
+    private String title;
+    private String description;
 
     public String getId() {
         return id;
@@ -28,7 +20,15 @@ public class NoteModel implements Serializable {
         return description;
     }
 
-    public int getBackgroundColor() {
-        return backgroundColor;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

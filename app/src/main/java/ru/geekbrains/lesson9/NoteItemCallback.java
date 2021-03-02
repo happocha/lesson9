@@ -13,7 +13,6 @@ public class NoteItemCallback extends DiffUtil.ItemCallback<NoteModel> {
     @Override
     public boolean areContentsTheSame(@NonNull NoteModel oldItem, @NonNull NoteModel newItem) {
         return oldItem.getTitle().equals(newItem.getTitle()) &&
-            oldItem.getDescription().equals(newItem.getDescription()) &&
-            oldItem.getBackgroundColor() == newItem.getBackgroundColor();
+            oldItem.getDescription().equals(newItem.getDescription());
     }
 }

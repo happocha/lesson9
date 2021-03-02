@@ -2,6 +2,7 @@ package ru.geekbrains.lesson9;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class NoteDetailsFragment extends Fragment {
 
     private final static String ARG_MODEL_KEY = "arg_model_key";
 
-    public static Fragment newInstance(@NonNull NoteModel model) {
+    private static final String TAG = "NoteDetailsFragment";
+    private final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+    public static Fragment newInstance(@Nullable NoteModel model) {
         Fragment fragment = new NoteDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_MODEL_KEY, model);
@@ -71,8 +82,10 @@ public class NoteDetailsFragment extends Fragment {
         });
         if (getArguments() != null) {
             NoteModel noteModel = (NoteModel) getArguments().getSerializable(ARG_MODEL_KEY);
-            titleEditText.setText(noteModel.getTitle());
-            descriptionEditText.setText(noteModel.getDescription());
+            if (noteModel != null) {
+                titleEditText.setText(noteModel.getTitle());
+                descriptionEditText.setText(noteModel.getDescription());
+            }
         }
     }
 
@@ -80,9 +93,31 @@ public class NoteDetailsFragment extends Fragment {
         @Nullable String title,
         @Nullable String description) {
         if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(description)) {
-            // todo next lesson
+            final String id = UUID.randomUUID().toString();
+            final Map<String, Object> note = new HashMap<>();
+            note.put("id", id);
+            note.put("title", title);
+            note.put("description", description);
+            firebaseFirestore
+                .collection("notes")
+                .document(id)
+                .set(note)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(requireContext(), "Запись успешно создана", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
         } else {
             Toast.makeText(requireContext(), "Поля не могут быть пустые", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

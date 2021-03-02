@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "468108639384",
+    "project_id": "geekbrains-firestore-qa",
+    "storage_bucket": "geekbrains-firestore-qa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468108639384:android:e7b483c8aec1c1be2b24ed",
+        "android_client_info": {
+          "package_name": "ru.geekbrains.lesson9"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468108639384-ulcr7u4350rdcmsgfd34l24bmjl41gu7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdc03LCqqCuvhks0uRHkdv3KUQdEYzpsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468108639384-ulcr7u4350rdcmsgfd34l24bmjl41gu7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

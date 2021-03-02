@@ -24,12 +24,6 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
 
     public void onBind(int position, NoteModel model) {
         materialTextView.setText(model.getTitle());
-        materialCardView.setCardBackgroundColor(
-            ContextCompat.getColor(
-                materialCardView.getContext(),
-                model.getBackgroundColor()
-            )
-        );
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
