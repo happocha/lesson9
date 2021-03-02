@@ -5,23 +5,20 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textview.MaterialTextView;
 
-import ru.geekbrains.lesson9.model.NoteModel;
 import ru.geekbrains.lesson9.R;
+import ru.geekbrains.lesson9.model.NoteModel;
 
 public class NoteViewHolder extends RecyclerView.ViewHolder {
 
     private final MaterialTextView materialTextView;
-    private final MaterialCardView materialCardView;
     private final NoteAdapterCallbacks callbacks;
 
     public NoteViewHolder(@NonNull View itemView, NoteAdapterCallbacks callbacks) {
         super(itemView);
         this.callbacks = callbacks;
         materialTextView = itemView.findViewById(R.id.tv_item_note);
-        materialCardView = itemView.findViewById(R.id.cv_item_note);
     }
 
     public void onBind(int position, NoteModel model) {
@@ -36,7 +33,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
             @Override
             public boolean onLongClick(View view) {
                 callbacks.onLongItemClicked(getAdapterPosition());
-                return false;
+                return true;
             }
         });
     }

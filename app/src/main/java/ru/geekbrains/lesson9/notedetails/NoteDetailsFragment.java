@@ -25,7 +25,6 @@ import ru.geekbrains.lesson9.model.NoteModel;
 public class NoteDetailsFragment extends Fragment implements NoteFirestoreCallbacks {
 
     private final static String ARG_MODEL_KEY = "arg_model_key";
-    private String deleteId = "";
 
     private final NoteRepository repository = new NoteRepositoryImpl(this);
 
@@ -71,19 +70,6 @@ public class NoteDetailsFragment extends Fragment implements NoteFirestoreCallba
                 }
             }
         });
-        toolbar.inflateMenu(R.menu.note_menu);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.action_note_delete) {
-                    repository.onDeleteClicked(deleteId);
-                    if (getActivity() != null) {
-                        getActivity().onBackPressed();
-                    }
-                }
-                return false;
-            }
-        });
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,7 +81,20 @@ public class NoteDetailsFragment extends Fragment implements NoteFirestoreCallba
         if (getArguments() != null) {
             NoteModel noteModel = (NoteModel) getArguments().getSerializable(ARG_MODEL_KEY);
             if (noteModel != null) {
-                deleteId = noteModel.getId();
+                updateButton.setText(getString(R.string.note_details_update_button_label));
+                toolbar.inflateMenu(R.menu.note_menu);
+                toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.action_note_delete) {
+                            repository.onDeleteClicked(noteModel.getId());
+                            if (getActivity() != null) {
+                                getActivity().onBackPressed();
+                            }
+                        }
+                        return false;
+                    }
+                });
                 titleEditText.setText(noteModel.getTitle());
                 descriptionEditText.setText(noteModel.getDescription());
             }
@@ -122,7 +121,6 @@ public class NoteDetailsFragment extends Fragment implements NoteFirestoreCallba
                     repository.setNote(noteModel.getId(), title, description);
                 } else {
                     String id = UUID.randomUUID().toString();
-                    deleteId = id;
                     repository.setNote(id, title, description);
                 }
             }

@@ -1,11 +1,10 @@
 package ru.geekbrains.lesson9.notes;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -29,7 +28,13 @@ public class NotesRepositoryImpl implements NotesRepository {
         firebaseFirestore
             .collection(Constants.TABLE_NAME_NOTES)
             .document(id)
-            .delete();
+            .delete()
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                requestNotes();
+            }
+        });
     }
 
     @Override
