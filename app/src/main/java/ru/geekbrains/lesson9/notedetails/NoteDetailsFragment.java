@@ -1,5 +1,6 @@
 package ru.geekbrains.lesson9.notedetails;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -26,8 +27,6 @@ public class NoteDetailsFragment extends Fragment implements NoteFirestoreCallba
 
     private final static String ARG_MODEL_KEY = "arg_model_key";
 
-    private final NoteRepository repository = new NoteRepositoryImpl(this);
-
     public static Fragment newInstance(@Nullable NoteModel model) {
         Fragment fragment = new NoteDetailsFragment();
         Bundle bundle = new Bundle();
@@ -36,10 +35,28 @@ public class NoteDetailsFragment extends Fragment implements NoteFirestoreCallba
         return fragment;
     }
 
+    public interface NoteDetailsClickListener {
+        void onItemClicked(@NonNull String text);
+    }
+
+    private NoteDetailsClickListener clickListener;
+
+    private final NoteRepository repository = new NoteRepositoryImpl(this);
+
     private EditText titleEditText;
     private EditText descriptionEditText;
     private MaterialButton updateButton;
     private MaterialToolbar toolbar;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            clickListener = (NoteDetailsClickListener) context;
+        } catch (ClassCastException e) {
+            // todo
+        }
+    }
 
     @Nullable
     @Override
@@ -76,6 +93,8 @@ public class NoteDetailsFragment extends Fragment implements NoteFirestoreCallba
                 final String title = titleEditText.getText().toString();
                 final String description = descriptionEditText.getText().toString();
                 update(title, description);
+                sendResult(title);
+                sendResultToActivity(title);
             }
         });
         if (getArguments() != null) {
@@ -135,4 +154,13 @@ public class NoteDetailsFragment extends Fragment implements NoteFirestoreCallba
         }
     }
 
+    private void sendResult(@NonNull String text) {
+        Bundle result = new Bundle();
+        result.putString("bundleKey", text);
+        getParentFragmentManager().setFragmentResult("requestKey", result);
+    }
+
+    private void sendResultToActivity(@NonNull String text) {
+        clickListener.onItemClicked(text);
+    }
 }

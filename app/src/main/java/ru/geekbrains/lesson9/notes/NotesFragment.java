@@ -1,6 +1,7 @@
 package ru.geekbrains.lesson9.notes;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,6 +34,20 @@ public class NotesFragment extends Fragment implements NoteAdapterCallbacks, Not
     private final List<NoteModel> noteList = new ArrayList<>();
     private final NotesRepository repository = new NotesRepositoryImpl(this);
     private final NoteListAdapter noteListAdapter = new NoteListAdapter(new NoteItemCallback(), this);
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                // We use a String here, but any type that can be put in a Bundle is supported
+                String result = bundle.getString("bundleKey");
+                Log.d("NotesFragment", result);
+                // Do something with the result
+            }
+        });
+    }
 
     @Nullable
     @Override
