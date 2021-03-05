@@ -3,4 +3,8 @@
     <string name="note_details_add_button_label">Добавить</string>
     <string name="note_details_update_button_label">Обновить</string>
     <string name="note_action_delete">Удалить</string>
+
+    <string name="note_detail_alert_title">Предупреждение</string>
+    <string name="note_detail_alert_message">Вы точно хотите удалить эту заметку?</string>
+    <string name="note_detail_alert_button_positive_label">Да</string>
 </resources>
